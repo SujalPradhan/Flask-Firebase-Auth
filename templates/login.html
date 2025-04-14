@@ -7,56 +7,230 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='portfolio.css') }}">
 
-  <title>Flask Template</title>
+  <title>My Portfolio</title>
   </head>
 
   <body>
     {% include 'navbar_public.html' %}
 
     <main>
-
-      <div class="auth-page_container">
-
-        <div class="login-form-container">
-
-          <div class="login-form">
-            <h2>Login</h2>
-
-            <div class="input-group">
-              <input type="email" id="email-input" name="email" placeholder="Email" required>
-              <div id="email-error-message" class="error-msg"></div>
-            </div>
-
-            <div class="input-group">
-              <input type="password" id="password-input" name="password" placeholder="Password" required>
-              <div id="password-error-message" class="error-msg"></div>
-            </div>
-
-            <div id="sign-in-btn" class="login-btn">Sign In</div>
-
-            <div class="alt-signin-divider">OR</div>
-
-
-            <button id="sign-in-with-google-btn" class="google-login-btn">
-              <img src="{{ url_for('static', filename='images/google-icon.png') }}" alt="Google Sign-in" class="google-btn-logo">
-              Sign in with Google</button>
-            
-            <div id="google-signin-error-message" class="error-msg"></div>
-            
-            <div class="signup-link-container">Don't have an account? <a href="{{ url_for('signup') }}">Sign up</a></div>
-            <div class="signup-link-container"><a href="{{ url_for('reset_password') }}">Forgot Password?</a></div>
+      <!-- Hero Section -->
+      <section id="hero" class="hero-section">
+        <div class="hero-content">
+          <h1>Hello, I'm <span class="highlight">Sujal</span></h1>
+          <h2>Web Developer & Designer</h2>
+          <p>I create beautiful, functional websites and applications</p>
+          <div class="hero-buttons">
+            <a href="#projects" class="btn primary-btn">View My Work</a>
+            <a href="#contact" class="btn secondary-btn">Contact Me</a>
           </div>
-
         </div>
+      </section>
 
-      </div>
+      <!-- About Section
+      <section id="about" class="about-section">
+        <div class="container">
+          <h2 class="section-heading">About Me</h2>
+          <div class="about-content">
+            <div class="about-text">
+              <p>I am a passionate web developer with expertise in building responsive and user-friendly web applications. With a background in design and programming, I bring creative solutions to complex problems.</p>
+              <p>My skills include front-end development with HTML, CSS, and JavaScript, as well as back-end development with Python and Flask. I'm always learning new technologies to improve my craft.</p>
+              <a href="#" class="btn download-btn">Download Resume</a>
+            </div>
+          </div>
+        </div>
+      </section> -->
 
+      <!-- Skills Section -->
+      <section id="skills" class="skills-section">
+        <div class="container">
+          <h2 class="section-heading">My Skills</h2>
+          
+          <div class="skills-categories">
+            <div class="skills-category">
+              <h3 class="category-heading">Frontend</h3>
+              <div class="skills-list">
+                <div class="skill-item">
+                  <h4>HTML5</h4>
+                  <div class="skill-bar">
+                    <div class="skill-level" style="width: 95%"></div>
+                  </div>
+                </div>
+                <div class="skill-item">
+                  <h4>CSS3</h4>
+                  <div class="skill-bar">
+                    <div class="skill-level" style="width: 90%"></div>
+                  </div>
+                </div>
+                <div class="skill-item">
+                  <h4>JavaScript</h4>
+                  <div class="skill-bar">
+                    <div class="skill-level" style="width: 85%"></div>
+                  </div>
+                </div>
+                <div class="skill-item">
+                  <h4>Vue.js</h4>
+                  <div class="skill-bar">
+                    <div class="skill-level" style="width: 75%"></div>
+                  </div>
+                </div>
+                <div class="skill-item">
+                  <h4>Bootstrap</h4>
+                  <div class="skill-bar">
+                    <div class="skill-level" style="width: 85%"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="skills-category">
+              <h3 class="category-heading">Backend</h3>
+              <div class="skills-list">
+                <div class="skill-item">
+                  <h4>Python</h4>
+                  <div class="skill-bar">
+                    <div class="skill-level" style="width: 90%"></div>
+                  </div>
+                </div>
+                <div class="skill-item">
+                  <h4>Flask</h4>
+                  <div class="skill-bar">
+                    <div class="skill-level" style="width: 85%"></div>
+                  </div>
+                </div>
+                <div class="skill-item">
+                  <h4>Firebase</h4>
+                  <div class="skill-bar">
+                    <div class="skill-level" style="width: 80%"></div>
+                  </div>
+                </div>
+                <div class="skill-item">
+                  <h4>SQL</h4>
+                  <div class="skill-bar">
+                    <div class="skill-level" style="width: 75%"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="skills-category">
+              <h3 class="category-heading">Other Skills</h3>
+              <div class="skills-list">
+                <div class="skill-item">
+                  <h4>Git/GitHub</h4>
+                  <div class="skill-bar">
+                    <div class="skill-level" style="width: 88%"></div>
+                  </div>
+                </div>
+                <div class="skill-item">
+                  <h4>AI/ML</h4>
+                  <div class="skill-bar">
+                    <div class="skill-level" style="width: 70%"></div>
+                  </div>
+                </div>
+                <div class="skill-item">
+                  <h4>UI/UX Design</h4>
+                  <div class="skill-bar">
+                    <div class="skill-level" style="width: 80%"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="github-link">
+            <a href="https://github.com/your-username" target="_blank" class="github-button">
+              <span>View My GitHub Profile</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Projects Section -->
+      <!-- <section id="projects" class="projects-section">
+        <div class="container">
+          <h2 class="section-heading">My Projects</h2>
+          <div class="projects-grid">
+            <div class="project-card">
+              <div class="project-details">
+                <h3>Project One</h3>
+                <p>A responsive website built with HTML, CSS, and JavaScript.</p>
+                <div class="project-links">
+                  <a href="#" class="project-link">View Live</a>
+                  <a href="#" class="project-link">GitHub</a>
+                </div>
+              </div>
+            </div>
+            <div class="project-card">
+              <div class="project-details">
+                <h3>Project Two</h3>
+                <p>A Flask web application with database integration.</p>
+                <div class="project-links">
+                  <a href="#" class="project-link">View Live</a>
+                  <a href="#" class="project-link">GitHub</a>
+                </div>
+              </div>
+            </div>
+            <div class="project-card">
+              <div class="project-details">
+                <h3>Project Three</h3>
+                <p>An interactive dashboard built with Python and JavaScript.</p>
+                <div class="project-links">
+                  <a href="#" class="project-link">View Live</a>
+                  <a href="#" class="project-link">GitHub</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section> -->
+
+      <!-- Contact Section -->
+      <!-- <section id="contact" class="contact-section">
+        <div class="container">
+          <h2 class="section-heading">Contact Me</h2>
+          <div class="contact-container">
+            <div class="contact-info">
+              <p>Feel free to reach out to me for any inquiries or project opportunities.</p>
+              <div class="contact-item">
+                <span class="contact-label">Email:</span>
+                <a href="mailto:your.email@example.com">your.email@example.com</a>
+              </div>
+              <div class="contact-item">
+                <span class="contact-label">LinkedIn:</span>
+                <a href="https://linkedin.com/in/yourprofile" target="_blank">linkedin.com/in/yourprofile</a>
+              </div>
+              <div class="contact-item">
+                <span class="contact-label">GitHub:</span>
+                <a href="https://github.com/yourusername" target="_blank">github.com/yourusername</a>
+              </div>
+            </div>
+            <div class="contact-form">
+              <div class="input-group">
+                <input type="text" id="name-input" name="name" placeholder="Your Name" required>
+              </div>
+              <div class="input-group">
+                <input type="email" id="email-input" name="email" placeholder="Your Email" required>
+              </div>
+              <div class="input-group">
+                <textarea id="message-input" name="message" placeholder="Your Message" required></textarea>
+              </div>
+              <button id="send-message-btn" class="btn primary-btn">Send Message</button>
+            </div>
+          </div>
+        </div>
+      </section> -->
     </main>
 
-    {% include 'footer.html' %}
+    <!-- {% include 'footer.html' %} -->
 
+    <!-- Firebase Authentication Scripts -->
+    <script src="{{ url_for('static', filename='firebase-config.js') }}" type="module"></script>
     <script src="{{ url_for('static', filename='login-auth.js') }}" type="module"></script>
+    <script src="{{ url_for('static', filename='portfolio.js') }}" type="module"></script>
+    <script src="{{ url_for('static', filename='navbar.js') }}"></script>
     <script src="{{ url_for('static', filename='scripts.js') }}" type="module"></script>
 
   </body>

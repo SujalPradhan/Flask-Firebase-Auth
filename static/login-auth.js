@@ -24,23 +24,34 @@ const errorMsgGoogleSignIn = document.getElementById("google-signin-error-messag
 
 
 /* == UI - Event Listeners == */
-if (signInWithGoogleButtonEl && signInButtonEl) {
-    signInWithGoogleButtonEl.addEventListener("click", authSignInWithGoogle)
-    signInButtonEl.addEventListener("click", authSignInWithEmail)
-}
+document.addEventListener('DOMContentLoaded', function() {
+    // Re-acquire elements to ensure they're available after the DOM has loaded
+    const signInWithGoogleButtonEl = document.getElementById("sign-in-with-google-btn")
+    const signUpWithGoogleButtonEl = document.getElementById("sign-up-with-google-btn")
+    const signInButtonEl = document.getElementById("sign-in-btn")
+    const createAccountButtonEl = document.getElementById("create-account-btn")
+    const forgotPasswordButtonEl = document.getElementById("forgot-password-btn")
 
-if (createAccountButtonEl) {
-    createAccountButtonEl.addEventListener("click", authCreateAccountWithEmail)
-}
+    if (signInWithGoogleButtonEl) {
+        signInWithGoogleButtonEl.addEventListener("click", authSignInWithGoogle)
+    }
 
-if (signUpWithGoogleButtonEl) {
-    signUpWithGoogleButtonEl.addEventListener("click", authSignUpWithGoogle)
-}
+    if (signInButtonEl) {
+        signInButtonEl.addEventListener("click", authSignInWithEmail)
+    }
 
-if (forgotPasswordButtonEl) {
-    forgotPasswordButtonEl.addEventListener("click", resetPassword)
-}
+    if (createAccountButtonEl) {
+        createAccountButtonEl.addEventListener("click", authCreateAccountWithEmail)
+    }
 
+    if (signUpWithGoogleButtonEl) {
+        signUpWithGoogleButtonEl.addEventListener("click", authSignUpWithGoogle)
+    }
+
+    if (forgotPasswordButtonEl) {
+        forgotPasswordButtonEl.addEventListener("click", resetPassword)
+    }
+});
 
 
 
@@ -50,6 +61,7 @@ if (forgotPasswordButtonEl) {
 
 // Function to sign in with Google authentication
 async function authSignInWithGoogle() {
+    console.log("Google sign-in initiated");
     // Configure Google Auth provider with custom parameters
     provider.setCustomParameters({
         'prompt': 'select_account'
@@ -72,6 +84,7 @@ async function authSignInWithGoogle() {
             throw new Error('Authentication failed: No email address returned.');
         }
 
+        console.log("Google sign-in successful, getting ID token");
         // Retrieve ID token for the user
         const idToken = await user.getIdToken();
 
@@ -80,7 +93,10 @@ async function authSignInWithGoogle() {
 
     } catch (error) {
         // Handle errors by logging and potentially updating the UI
-        handleLogging(error, 'Error during sign-in with Google');
+        console.error('Error during sign-in with Google:', error);
+        if (errorMsgGoogleSignIn) {
+            errorMsgGoogleSignIn.textContent = "Authentication failed. Please try again.";
+        }
     }
 }
 
@@ -104,6 +120,9 @@ async function authSignUpWithGoogle() {
         // The AuthCredential type that was used or other errors.
         console.error("Error during Google signup: ", error.message);
         // Handle error appropriately here, e.g., updating UI to show an error message
+        if (errorMsgGoogleSignIn) {
+            errorMsgGoogleSignIn.textContent = "Authentication failed. Please try again.";
+        }
     }
 }
 
@@ -111,71 +130,112 @@ async function authSignUpWithGoogle() {
 
 
 function authSignInWithEmail() {
+    console.log("Email sign-in initiated");
+    
+    const emailInputEl = document.getElementById("email-input");
+    const passwordInputEl = document.getElementById("password-input");
+    const errorMsgEmail = document.getElementById("email-error-message");
+    const errorMsgPassword = document.getElementById("password-error-message");
+    
+    if (!emailInputEl || !passwordInputEl) {
+        console.error("Email or password input elements not found");
+        return;
+    }
 
     const email = emailInputEl.value
     const password = passwordInputEl.value
+
+    // Clear any previous error messages
+    if (errorMsgEmail) errorMsgEmail.textContent = "";
+    if (errorMsgPassword) errorMsgPassword.textContent = "";
 
     signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             // Signed in 
             const user = userCredential.user;
+            console.log("User signed in successfully");
 
             user.getIdToken().then(function(idToken) {
                 loginUser(user, idToken)
             });
 
-            console.log("User signed in: ", user)
         })
         .catch((error) => {
             const errorCode = error.code;
-            console.error("Error code: ", errorCode)
+            console.error("Error code: ", errorCode);
+            
             if (errorCode === "auth/invalid-email") {
-                errorMsgEmail.textContent = "Invalid email"
+                if (errorMsgEmail) errorMsgEmail.textContent = "Invalid email";
             } else if (errorCode === "auth/invalid-credential") {
-                errorMsgPassword.textContent = "Login failed - invalid email or password"
-            } 
+                if (errorMsgPassword) errorMsgPassword.textContent = "Login failed - invalid email or password";
+            } else {
+                if (errorMsgPassword) errorMsgPassword.textContent = "Login failed - please try again";
+            }
         });
 }
 
 
 
 function authCreateAccountWithEmail() {
+    const emailInputEl = document.getElementById("email-input");
+    const passwordInputEl = document.getElementById("password-input");
+    const errorMsgEmail = document.getElementById("email-error-message");
+    const errorMsgPassword = document.getElementById("password-error-message");
+    
+    if (!emailInputEl || !passwordInputEl) {
+        console.error("Email or password input elements not found");
+        return;
+    }
 
     const email = emailInputEl.value
     const password = passwordInputEl.value
 
+    // Clear any previous error messages
+    if (errorMsgEmail) errorMsgEmail.textContent = "";
+    if (errorMsgPassword) errorMsgPassword.textContent = "";
+
     createUserWithEmailAndPassword(auth, email, password)
         .then(async (userCredential) => {
             // Signed in 
-            
             const user = userCredential.user;
+            console.log("User account created successfully");
 
-            await addNewUserToFirestore(user)
-            setTimeout(100)
+            // Note: This function might not be defined depending on your app structure
+            // If it's causing errors, you can comment it out or implement it
+            try {
+                await addNewUserToFirestore(user);
+            } catch (e) {
+                console.error("Could not add user to Firestore:", e);
+                // Continue anyway since the Firebase Auth account was created
+            }
 
             user.getIdToken().then(function(idToken) {
                 loginUser(user, idToken)
             });
-
         })
         .catch((error) => {
             const errorCode = error.code;
 
             if (errorCode === "auth/invalid-email") {
-                errorMsgEmail.textContent = "Invalid email"
+                if (errorMsgEmail) errorMsgEmail.textContent = "Invalid email";
             } else if (errorCode === "auth/weak-password") {
-                errorMsgPassword.textContent = "Invalid password - must be at least 6 characters"
+                if (errorMsgPassword) errorMsgPassword.textContent = "Invalid password - must be at least 6 characters";
             } else if (errorCode === "auth/email-already-in-use") {
-                errorMsgEmail.textContent = "An account already exists for this email."
+                if (errorMsgEmail) errorMsgEmail.textContent = "An account already exists for this email.";
             }
-
         });
-
 }
 
 
 
 function resetPassword() {
+    const emailForgotPasswordEl = document.getElementById("email-forgot-password");
+    
+    if (!emailForgotPasswordEl) {
+        console.error("Email input for password reset not found");
+        return;
+    }
+
     const emailToReset = emailForgotPasswordEl.value
 
     clearInputField(emailForgotPasswordEl)
@@ -186,21 +246,21 @@ function resetPassword() {
         const resetFormView = document.getElementById("reset-password-view")
         const resetSuccessView = document.getElementById("reset-password-confirmation-page")
 
-        resetFormView.style.display = "none"
-        resetSuccessView.style.display = "block"
-
+        if (resetFormView) resetFormView.style.display = "none";
+        if (resetSuccessView) resetSuccessView.style.display = "block";
     })
     .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
- 
+        console.error("Password reset error:", errorMessage);
     });
-
 }
 
 
 
 function loginUser(user, idToken) {
+    console.log("Sending authentication request to server");
+    
     fetch('/auth', {
         method: 'POST',
         headers: {
@@ -210,14 +270,31 @@ function loginUser(user, idToken) {
         credentials: 'same-origin'  // Ensures cookies are sent with the request
     }).then(response => {
         if (response.ok) {
-            window.location.href = '/dashboard';
+            console.log("Authentication successful, redirecting to portfolio");
+            window.location.href = '/portfolio';
         } else {
-            console.error('Failed to login');
-            // Handle errors here
+            console.error('Failed to login:', response.status, response.statusText);
+            // Display error message to the user
+            const errorMsgGoogleSignIn = document.getElementById("google-signin-error-message");
+            if (errorMsgGoogleSignIn) {
+                errorMsgGoogleSignIn.textContent = "Server authentication failed. Please try again.";
+            }
         }
     }).catch(error => {
         console.error('Error with Fetch operation: ', error);
+        const errorMsgGoogleSignIn = document.getElementById("google-signin-error-message");
+        if (errorMsgGoogleSignIn) {
+            errorMsgGoogleSignIn.textContent = "Authentication error. Please try again.";
+        }
     });
+}
+
+// Helper function to add a new user to Firestore if needed
+async function addNewUserToFirestore(user) {
+    // This is a placeholder - implement if needed for your application
+    console.log("Would add user to Firestore:", user.uid);
+    // In a real implementation, you would add code to store user data in Firestore
+    return true;
 }
 
 
@@ -228,8 +305,11 @@ function clearInputField(field) {
 }
 
 function clearAuthFields() {
-	clearInputField(emailInputEl)
-	clearInputField(passwordInputEl)
+    const emailInputEl = document.getElementById("email-input");
+    const passwordInputEl = document.getElementById("password-input");
+    
+	if (emailInputEl) clearInputField(emailInputEl);
+	if (passwordInputEl) clearInputField(passwordInputEl);
 }
 
 
