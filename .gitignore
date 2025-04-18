@@ -1,3 +1,24 @@
-firebase-auth.json
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+env/
+venv/
 .env
+.env.local
+
+# Firebase credentials
+firebase-auth.json
+static/firebase-config.js
+
+# Keep the template file
+!static/firebase-config.template.js
+
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
 

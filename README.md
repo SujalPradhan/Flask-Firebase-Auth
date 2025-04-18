@@ -49,9 +49,28 @@ Flask-Firebase-Template/
 1. Create a Firebase project at [firebase.google.com](https://firebase.google.com)
 2. Enable desired authentication methods (Email/Password, Google, etc.)
 3. Generate a Firebase Admin SDK service account key and save as `firebase-auth.json`
-4. Update Firebase configuration in `static/firebase-config.js`
+4. Set up Firebase configuration:
+   - Copy `static/firebase-config.template.js` to `static/firebase-config.js`
+   - Replace placeholder values with your Firebase project details
 5. Install dependencies: `pip install -r requirements.txt`
 6. Run the application: `python app.py`
+
+## Firebase Configuration Setup
+
+For security reasons, Firebase configuration is not included in the repository.
+
+1. Copy the template file: `cp static/firebase-config.template.js static/firebase-config.js`
+2. Update `static/firebase-config.js` with your Firebase project details:
+   ```javascript
+   const firebaseConfig = {
+     apiKey: "YOUR_API_KEY",
+     authDomain: "YOUR_AUTH_DOMAIN",
+     projectId: "YOUR_PROJECT_ID",
+     storageBucket: "YOUR_STORAGE_BUCKET",
+     messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+     appId: "YOUR_APP_ID"
+   };
+   ```
 
 ## Security Features
 
